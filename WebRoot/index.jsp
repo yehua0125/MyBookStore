@@ -9,11 +9,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
    	<title>前台首页</title>
   </head>
-  
- 
+
   <frameset rows="40%,*">
   	<frame src="${pageContext.request.contextPath}/client/head.jsp" name="head">
-  	
+  	<frame src="${pageContext.request.contextPath}/message.jsp" name="body">
   </frameset>
    
   

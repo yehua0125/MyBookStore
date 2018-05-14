@@ -8,15 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import service.impl.BusinessServiceImpl;
+import utils.WebUtils;
 import domain.User;
-import service.impl.*;
 
-public class LoginServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public LoginServlet() {
+	public RegisterServlet() {
 		super();
 	}
 
@@ -40,18 +41,36 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("进入了LoginServlet");
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
-		BusinessServiceImpl service=new BusinessServiceImpl();
-		User user=service.userLogin(username, password);
-		if(user == null){
-			request.setAttribute("message", "用户名或者密码错误");
+		try {
+			String username=request.getParameter("username");
+			String password = request.getParameter("password");
+			String phone = request.getParameter("phone");
+			String email = request.getParameter("email");
+			String address = request.getParameter("address");
+			//应该加上验证账号注册信息是否正确
+			
+			User user=new User();
+			user.setAddress(address);
+			user.setPhone(phone);
+			user.setEmail(email);
+			user.setId(WebUtils.makeID());
+			user.setPassword(password);
+			user.setUsername(username);
+			
+			BusinessServiceImpl service=new BusinessServiceImpl();
+			service.registerUser(user);
+			request.setAttribute("message", "注册成功");
 			request.getRequestDispatcher("/message.jsp").forward(request, response);
-			return;
+			//注册成功后，显示信息后应该跳转会首页 bug
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("message", "注册失败");
+			request.getRequestDispatcher("/message.jsp").forward(request, response);
+			
 		}
-		request.getSession().setAttribute("user", user);
-		request.getRequestDispatcher("/client/head.jsp").forward(request, response);
+		
 	}
 
 	/**
@@ -66,7 +85,8 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);		
+		doGet(request, response);
+		
 	}
 
 	/**

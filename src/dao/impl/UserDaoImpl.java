@@ -14,7 +14,7 @@ public class UserDaoImpl implements UserDao{
 		// TODO Auto-generated method stub
 		try{
 			QueryRunner qr=new QueryRunner(JdbcUtils.getDataSource());
-			String sql="insert into users(id,username,password,phone,address,email) values(?,?,?,?,?)";
+			String sql="insert into users (id,username,password,phone,address,email) values (?,?,?,?,?,?)";
 			Object params[]={user.getId(),user.getUsername(),user.getPassword(),user.getPhone(),user.getAddress(),user.getEmail()};
 			qr.update(sql, params);
 		}catch (Exception e){
