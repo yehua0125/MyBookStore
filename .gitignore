@@ -4,6 +4,7 @@
 *.jar  
 *.project 
 *.classpath  
+*.clss
 
 #过滤文件夹settings 
 .settings/  
