@@ -1,10 +1,10 @@
-[plain] view plaincopy
+﻿[plain] view plaincopy
 #过滤数据库文件、sln解决方案文件、配置文件  
 *.MF 
 *.jar  
 *.project 
 *.classpath  
-*.clss
+*.class
 
 #过滤文件夹settings 
 .settings/  
