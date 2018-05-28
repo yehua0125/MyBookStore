@@ -12,7 +12,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
   <frameset rows="40%,*">
   	<frame src="${pageContext.request.contextPath}/client/head.jsp" name="head">
-  	<frame src="${pageContext.request.contextPath}/message.jsp" name="body">
+  	
+  	<frame src="${pageContext.request.contextPath}/client/head.jsp" name="body">
   </frameset>
    
   

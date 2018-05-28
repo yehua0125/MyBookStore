@@ -19,6 +19,20 @@
     <servlet-name>LoginOutServlet</servlet-name>
     <servlet-class>web.client.LoginOutServlet</servlet-class>
   </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>IndexServlet</servlet-name>
+    <servlet-class>web.client.IndexServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>BookServlet</servlet-name>
+    <servlet-class>web.manager.BookServlet</servlet-class>
+  </servlet>
+
+
 
 
 
@@ -33,6 +47,14 @@
   <servlet-mapping>
     <servlet-name>LoginOutServlet</servlet-name>
     <url-pattern>/client/LoginOutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>IndexServlet</servlet-name>
+    <url-pattern>/manager/IndexServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BookServlet</servlet-name>
+    <url-pattern>/manager/BookServlet</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
