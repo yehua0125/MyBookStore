@@ -1,22 +1,25 @@
-package web.client;
+package web.manager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.User;
-import service.impl.*;
+import service.impl.BusinessServiceImpl;
+import utils.WebUtils;
+import domain.Category;
 
-public class LoginServlet extends HttpServlet {
+public class CategoryServlet extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public LoginServlet() {
+	public CategoryServlet() {
 		super();
 	}
 
@@ -40,17 +43,14 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
-		BusinessServiceImpl service=new BusinessServiceImpl();
-		User user=service.userLogin(username, password);
-		if(user == null){
-			request.setAttribute("message", "用户名或者密码错误");
-			request.getRequestDispatcher("/message.jsp").forward(request, response);
-			return;
+		String method=request.getParameter("method");
+		if(method.equals("add")){
+			add(request,response);
 		}
-		request.getSession().setAttribute("user", user);
-		request.getRequestDispatcher("/client/head.jsp").forward(request, response);
+		if(method.equals("listall")){
+			list(request,response);
+		}
+
 	}
 
 	/**
@@ -65,9 +65,42 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);		
+
+		doGet(request, response);
 	}
 
+	private void add(HttpServletRequest request,HttpServletResponse response)
+		throws ServletException,IOException{
+		try{
+			String name=request.getParameter("name");
+			String description=request.getParameter("descriprion");
+			
+			Category category=new Category();
+			category.setName(name);
+			category.setDescription(description);
+			category.setId(WebUtils.makeID());
+			
+			BusinessServiceImpl service=new BusinessServiceImpl();
+			service.addCategory(category);
+			request.setAttribute("message", "添加成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			request.setAttribute("message", "添加失败");
+		}
+		request.getRequestDispatcher("/message.jsp").forward(request, response);
+		
+	}
+	
+	private void list(HttpServletRequest request,HttpServletResponse response)
+			throws ServletException,IOException{
+			List<Category> categories=new ArrayList();
+			BusinessServiceImpl service=new BusinessServiceImpl();
+			categories = service.getAllCategory();
+			request.setAttribute("categories", categories);
+			request.getRequestDispatcher("/manager/listcategory.jsp").forward(request, response);
+		
+	}
+	
 	/**
 	 * Initialization of the servlet. <br>
 	 *

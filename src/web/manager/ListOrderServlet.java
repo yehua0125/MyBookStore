@@ -1,22 +1,23 @@
-package web.client;
+package web.manager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.User;
-import service.impl.*;
+import domain.Order;
+import service.impl.BusinessServiceImpl;
 
-public class LoginServlet extends HttpServlet {
+public class ListOrderServlet extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public LoginServlet() {
+	public ListOrderServlet() {
 		super();
 	}
 
@@ -40,17 +41,13 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
+		String state=request.getParameter("state");
 		BusinessServiceImpl service=new BusinessServiceImpl();
-		User user=service.userLogin(username, password);
-		if(user == null){
-			request.setAttribute("message", "用户名或者密码错误");
-			request.getRequestDispatcher("/message.jsp").forward(request, response);
-			return;
-		}
-		request.getSession().setAttribute("user", user);
-		request.getRequestDispatcher("/client/head.jsp").forward(request, response);
+		List<Order> orders=service.listOrder(state);
+		//这里需要获取该用户所有的订单消息，不用只看未发货的，后台会区分未发货和已发货，和前台罗列在一起
+		request.setAttribute("orders", orders);
+		request.getRequestDispatcher("/manager/listorder.jsp").forward(request, response);
+	
 	}
 
 	/**
@@ -65,7 +62,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);		
+		doGet(request, response);
 	}
 
 	/**

@@ -8,15 +8,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.User;
-import service.impl.*;
+import domain.Order;
+import service.impl.BusinessServiceImpl;
 
-public class LoginServlet extends HttpServlet {
+public class ClientOrderDetailServlet extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public LoginServlet() {
+	public ClientOrderDetailServlet() {
 		super();
 	}
 
@@ -40,17 +40,12 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
+		String orderid=request.getParameter("orderid");
 		BusinessServiceImpl service=new BusinessServiceImpl();
-		User user=service.userLogin(username, password);
-		if(user == null){
-			request.setAttribute("message", "用户名或者密码错误");
-			request.getRequestDispatcher("/message.jsp").forward(request, response);
-			return;
-		}
-		request.getSession().setAttribute("user", user);
-		request.getRequestDispatcher("/client/head.jsp").forward(request, response);
+		Order order=service.findOrder(orderid);
+		request.setAttribute("order", order);
+		request.getRequestDispatcher("/client/clientorderdetail.jsp").forward(request, response);
+		
 	}
 
 	/**
@@ -65,7 +60,9 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);		
+		doGet(request, response);
+		
+		
 	}
 
 	/**

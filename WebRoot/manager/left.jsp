@@ -40,6 +40,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<a href="${pageContext.request.contextPath}/manager/BookServlet?method=addUI" target="right">添加图书</a><br/>
 					<a href="${pageContext.request.contextPath}/manager/BookServlet?method=list" target="right">查看图书</a>
 					</div>
+				</a>
+			</li>
+			<br/><br/>
+			<li>
+				<a href="#" onclick="test('menu3')">订单管理
+					<div id="menu3" class="menu">
+					<a href="${pageContext.request.contextPath}/manager/ListOrderServlet?state=false" target="right">未发货订单</a><br/>
+					<a href="${pageContext.request.contextPath}/manager/ListOrderServlet?state=true" target="right">已发货订单</a>
+					</div>		
+				</a>
+			</li>
+			<br/><br/>
 		</ul>   
   </body>
 </html>

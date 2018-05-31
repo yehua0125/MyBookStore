@@ -5,7 +5,7 @@ public class Book {
 	private String id;
 	private String name;
 	private String author;
-	private double price;
+	private float price;
 	private String image;//记住图片的名称
 	private String description;
 	private String category_id;//维护所属分类的id
@@ -29,10 +29,10 @@ public class Book {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public double getPrice() {
+	public float getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 	public String getImage() {

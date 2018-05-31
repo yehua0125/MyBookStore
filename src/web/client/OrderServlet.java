@@ -8,15 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import service.impl.BusinessServiceImpl;
+import domain.Cart;
 import domain.User;
-import service.impl.*;
 
-public class LoginServlet extends HttpServlet {
+public class OrderServlet extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public LoginServlet() {
+	public OrderServlet() {
 		super();
 	}
 
@@ -40,17 +41,29 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
-		BusinessServiceImpl service=new BusinessServiceImpl();
-		User user=service.userLogin(username, password);
-		if(user == null){
-			request.setAttribute("message", "用户名或者密码错误");
+		try {
+			User user=(User) request.getSession().getAttribute("user");
+			if(user==null){
+				request.setAttribute("message", "请先登录");
+				request.getRequestDispatcher("/message.jsp").forward(request, response);
+				return ;
+			}
+			
+			Cart cart=(Cart) request.getSession().getAttribute("cart");
+			BusinessServiceImpl service=new BusinessServiceImpl();
+			service.createOrder(cart, user);
+			request.setAttribute("message", "订单已经生成");
+			request.getSession().removeAttribute("cart");
+			//购买后 清空购物车？
 			request.getRequestDispatcher("/message.jsp").forward(request, response);
-			return;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("message", "订单生成失败");
+			request.getRequestDispatcher("/message.jsp").forward(request, response);
 		}
-		request.getSession().setAttribute("user", user);
-		request.getRequestDispatcher("/client/head.jsp").forward(request, response);
+		
 	}
 
 	/**
@@ -65,7 +78,9 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);		
+		doGet(request, response);
+		
+		
 	}
 
 	/**

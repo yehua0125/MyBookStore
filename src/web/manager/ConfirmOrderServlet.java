@@ -1,4 +1,4 @@
-package web.client;
+package web.manager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,15 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.User;
-import service.impl.*;
+import service.impl.BusinessServiceImpl;
 
-public class LoginServlet extends HttpServlet {
+public class ConfirmOrderServlet extends HttpServlet {
 
 	/**
 	 * Constructor of the object.
 	 */
-	public LoginServlet() {
+	public ConfirmOrderServlet() {
 		super();
 	}
 
@@ -40,17 +39,24 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
-		BusinessServiceImpl service=new BusinessServiceImpl();
-		User user=service.userLogin(username, password);
-		if(user == null){
-			request.setAttribute("message", "用户名或者密码错误");
+		try {
+			String orderid= request.getParameter("orderid");
+			BusinessServiceImpl service=new BusinessServiceImpl();
+			service.confirmOrder(orderid);
+			request.setAttribute("message", "订单已设置为发货状态，请及时配送");
 			request.getRequestDispatcher("/message.jsp").forward(request, response);
-			return;
+			
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("message", "确认失败");
+			
+			request.getRequestDispatcher("/message.jsp").forward(request, response);
+			
 		}
-		request.getSession().setAttribute("user", user);
-		request.getRequestDispatcher("/client/head.jsp").forward(request, response);
+	
 	}
 
 	/**
@@ -65,7 +71,9 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);		
+
+		doGet(request, response);
+		
 	}
 
 	/**
